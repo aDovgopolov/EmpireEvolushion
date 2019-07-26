@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7116209731338192824}
   - component: {fileID: 7116209731338192825}
-  - component: {fileID: 3323164234650431394}
   - component: {fileID: -7452906298900225588}
   - component: {fileID: 930359965473297808}
   m_Layer: 8
@@ -29,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7116209731338192826}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -71,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 234897341
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5ddf448fb6099e84fae7dbbb85218b31, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dffe1e858beedbe49b32c621d80e7d62, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -82,19 +81,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3323164234650431394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7116209731338192826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccdac63bbf65eea4a83cbab21356a83c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _coin: {fileID: 341623476865130870, guid: 600016ba501501f42a97b4a077f76b7a, type: 3}
 --- !u!61 &-7452906298900225588
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +98,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4, y: 4}
+    oldSize: {x: 2.11, y: 2.78}
     newSize: {x: 4.88, y: 7.26}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -134,4 +120,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _coinCount: 5
+  _coin: {fileID: 341623476865130870, guid: 600016ba501501f42a97b4a077f76b7a, type: 3}
   myObject: {fileID: 706114155133731918, guid: a8bed6fbb8d832a40a3493f1420ea4f1, type: 3}

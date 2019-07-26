@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1548051593120663739}
   - component: {fileID: 1548051593120663736}
-  - component: {fileID: 1548051593120663738}
   - component: {fileID: 1548051593120663733}
   - component: {fileID: 1378645447370156224}
   m_Layer: 8
@@ -71,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 234897341
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bf5d38ea93d69bb46add62a51130b020, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1751069e28d30c64288d5be0a41ab560, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -82,19 +81,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1548051593120663738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1548051593120663737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccdac63bbf65eea4a83cbab21356a83c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _coin: {fileID: 341623476865130870, guid: 600016ba501501f42a97b4a077f76b7a, type: 3}
 --- !u!61 &1548051593120663733
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +98,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4, y: 4}
+    oldSize: {x: 2.11, y: 2.78}
     newSize: {x: 4, y: 4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -134,5 +120,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _coinCount: 20
+  _coin: {fileID: 341623476865130870, guid: 600016ba501501f42a97b4a077f76b7a, type: 3}
   myObject: {fileID: 7116209731338192826, guid: 7e4eee4e446c5a044a0f41c298e2d677,
     type: 3}
