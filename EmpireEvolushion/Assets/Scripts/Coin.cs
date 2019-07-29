@@ -6,6 +6,7 @@ public class Coin : MonoBehaviour
 {
 	private float _speed = 0.5f;
 	private UIManager UIManager;
+	//private UIManagerMainScene UIManager;
 	public int coinCosts;
 
 	public int MyProperty
@@ -19,11 +20,9 @@ public class Coin : MonoBehaviour
 
 	void Start()
     {
-		UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-		//UIManager.UpdateScoreCoinText(transform.parent.GetComponent<Unit>().MyCoinCount);
-		//StartCoroutine(PayCoin());
+		//UIManager = GameObject.Find("Canvas").GetComponent<UIManagerMainScene>();
+		UIManager = GameObject.Find("Canvas2").GetComponent<UIManager>();
 		UIManager.UpdateScoreCoinText(coinCosts);
-		//StartCoroutine(PayCoin());
 		Destroy(this.gameObject, 1.5f);
     }
 	
@@ -34,7 +33,7 @@ public class Coin : MonoBehaviour
 
 	public void SetCoinCosts(int value)
 	{
-		Debug.Log($"Coin SetCoinCosts(); {value}");
+		//Debug.Log($"Coin SetCoinCosts(); {value}");
 		GetComponent<Coin>().coinCosts = value;
 		coinCosts = value;
 	}

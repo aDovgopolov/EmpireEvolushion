@@ -8,15 +8,11 @@ public class UIManager : MonoBehaviour
 {
 	[HideInInspector]
 	public static UIManager instance = null;
-	[SerializeField]
-	private Text _scoreText;
-	[SerializeField]
-	private Button _mapButton;
+
 	[SerializeField]
 	private GameObject _scrollbar;
 	public GameObject _prefab;
-	private int coinScore = 100;
-
+	private int coinScore = GameManager.instance.MyCoinCount;
 	[SerializeField]
 	private int _unitsOnScene = 0;
 	[SerializeField]
@@ -47,32 +43,18 @@ public class UIManager : MonoBehaviour
 			Destroy(gameObject);
 	}
 
-	// Start is called before the first frame update
 	void Start()
     {
-
-		_scoreText.text = "" + coinScore;
+		//_scoreText.text = "" + coinScore;
 		StartCoroutine(StartSpawnUnits());
 	}
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
 	public void UpdateScoreCoinText(int score)
 	{
 		coinScore += score;
-		_scoreText.text = "" + coinScore;
+		//_scoreText.text = "" + coinScore;
 		GameManager.instance.SetCoinCount(coinScore);
 	}
-
-	public void LoadMainMap()
-	{
-		SceneManager.LoadScene("MainScene");
-	}
-
 
 	public IEnumerator StartSpawnUnits()
 	{
