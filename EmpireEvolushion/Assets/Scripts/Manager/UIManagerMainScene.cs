@@ -13,11 +13,39 @@ public class UIManagerMainScene : MonoBehaviour
 	[SerializeField]
 	private GameObject _achivkaPanel;
 	[SerializeField]
+	private Text _notEnoughMoneyText;
+	[SerializeField]
 	private GameObject _questPanel;
 	[SerializeField]
 	private GameObject _mainScreenPanel;
+	[SerializeField]
+	public GameObject _buildMenuPanel;
+	[SerializeField]
+	private Button _btn1Meel;
+	[SerializeField]
+	private Image _image;
+	public Sprite imageBtn1Sprite1;
+	public Sprite millImage;
+	public Sprite imageBtn1Sprite2;
+	private bool _isSelectedBuilding = false;
+	private GameObject _selectedBuilding;
 
-	// Start is called before the first frame update
+	[HideInInspector]
+	public static UIManagerMainScene instance = null;
+
+	public int millPrice = 100;
+
+	void Awake()
+	{
+		Debug.Log("void Awake()");
+		if (instance == null)
+			instance = this;
+		else if (instance != this)
+			Destroy(gameObject);
+
+		DontDestroyOnLoad(gameObject);
+	}
+	
 	void Start()
     {
 		//_achivkaPanel = GameObject.Find("Achivka_Panel");
@@ -28,12 +56,6 @@ public class UIManagerMainScene : MonoBehaviour
 		//Debug.Log($"{_achivkaPanel}  / {_questPanel} / {_mainScreenPanel}");
 		
 	}
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
 	public void OpenMissionMenu()
 	{
@@ -58,5 +80,86 @@ public class UIManagerMainScene : MonoBehaviour
 	public void OpenSettingsMenu()
 	{
 		Debug.Log("OpenSettingsMenu()");
+	}
+
+	public void UpdateMeelImage()
+	{
+		Debug.Log("UpdateMeelImage()");
+		if (!_isSelectedBuilding)
+		{
+			_image.GetComponent<Image>().sprite = imageBtn1Sprite2;
+			_isSelectedBuilding = true;
+		}
+		else if (GameManager.instance.MyCoinCount < millPrice)
+		{
+			Debug.Log("NOT ENOUGH COINS");
+			NotEnoughMoneyMessage();
+		}
+		else
+		{
+			// build meel
+			Debug.Log("build meel");
+			GameManager.instance.MyCoinCount = -millPrice;
+			_selectedBuilding.GetComponent<SpriteRenderer>().sprite = millImage;
+			_isSelectedBuilding = false;
+			_image.GetComponent<Image>().sprite = imageBtn1Sprite1;
+			_buildMenuPanel.SetActive(false);
+		}
+
+	}
+
+	private void NotEnoughMoneyMessage()
+	{
+		_notEnoughMoneyText.GetComponent<Text>().enabled = true;
+		StartCoroutine(TextDisaper());
+		_isSelectedBuilding = false;
+		_image.GetComponent<Image>().sprite = imageBtn1Sprite1;
+		_buildMenuPanel.SetActive(false);
+	}
+
+	IEnumerator TextDisaper()
+	{
+		yield return new WaitForSeconds(2f);
+		_notEnoughMoneyText.GetComponent<Text>().enabled = false;
+	}
+
+
+
+
+	public Camera cam;
+
+	public void GainBuildingCreateControl(GameObject hit)
+	{
+		_selectedBuilding = hit;
+		_buildMenuPanel.SetActive(true);
+
+		cam = Camera.main;
+		Vector3 cameraRelative = cam.WorldToScreenPoint(hit.transform.position);
+
+		//_buildMenuPanel.transform.localPosition = hit.transform.localPosition;
+		_buildMenuPanel.transform.position = cameraRelative; //transform.TransformPoint(hit.transform.position);//hit.transform.TransformVector(hit.transform.position); //;
+		GameObject obj = GameObject.Find("Canvas");
+		Canvas canvas = obj.GetComponent<Canvas>();
+
+		Offset = _buildMenuPanel.transform.position - WorldToUISpace(canvas, hit.transform.position);
+		_buildMenuPanel.transform.position = WorldToUISpace(canvas, hit.transform.localPosition);
+	}
+
+
+	Vector3 Offset = Vector3.zero;
+
+	public Vector3 WorldToUISpace(Canvas parentCanvas, Vector3 worldPos)
+	{
+		//Convert the world for screen point so that it can be used with ScreenPointToLocalPointInRectangle function
+		Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+		Vector2 movePos;
+
+		//Convert the screenpoint to ui rectangle local point
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(parentCanvas.transform as RectTransform, screenPos, parentCanvas.worldCamera, out movePos);
+		//Convert the local point to world point
+		/*
+		 * Костыль movePos.y + 20
+		 */
+		return parentCanvas.transform.TransformPoint(new Vector3(movePos.x, movePos.y + 20));
 	}
 }

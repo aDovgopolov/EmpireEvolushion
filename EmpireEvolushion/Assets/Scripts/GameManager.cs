@@ -13,7 +13,11 @@ public class GameManager : MonoBehaviour
 	private int _unitsOnScene = 0;
 	[SerializeField]
 	private int _maxUnitsOnScene = 5;
-	private int _coinCount = 0;
+	private int _coinCount = 150;
+	public int MyCoinCount{
+		get {return _coinCount;}
+		set {_coinCount += value;}
+	}
 	private Text text;
 	public int CountUnitsOnScene
 	{
@@ -51,9 +55,64 @@ public class GameManager : MonoBehaviour
 		//StartCoroutine(LoadSavedScene());
     }
 
+
+	public Camera cam;
+
 	private void Update()
 	{
-		Debug.Log("void Update()");
+
+#if UNITY_ANDROID
+		if (Input.GetMouseButton(0))
+		{
+			var v3 = Input.mousePosition;
+			v3.z = 10f;
+			v3 = Camera.main.ScreenToWorldPoint(v3);
+
+			RaycastHit2D hit = Physics2D.Raycast(v3, Vector2.zero);
+			Debug.DrawLine(v3, new Vector3(1.6f, 1.7f, 0f), Color.red, Time.deltaTime);
+
+			Debug.Log($"hit = {hit}");
+			if (hit.collider != null)
+			{
+				Debug.Log($"{hit.transform.gameObject.name}");
+				cam = Camera.main;
+				 Vector3 cameraRelative = cam.WorldToScreenPoint(hit.transform.position); 
+
+				//Debug.Log($"{cameraRelative} - {cameraRelative} - {hit.transform.localPosition} - {hit.transform.position} - {hit.transform.TransformPoint(hit.transform.position)}  - {transform.TransformPoint(hit.transform.localPosition)}");
+				UIManagerMainScene.instance.GainBuildingCreateControl(hit.transform.gameObject);
+				//UIManagerMainScene.instance.GainBuildingCreateControl(cameraRelative);
+			}
+		}
+
+#elif UNITY_EDITOR
+		if (Input.GetMouseButton(0) || Input.touchCount > 0)
+		{
+			Touch touch = Input.GetTouch(0);
+			Debug.Log(touch.deltaTime);
+			switch (touch.phase)
+			{
+				case TouchPhase.Began:
+					var v3 = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10f));
+
+					RaycastHit2D hit = Physics2D.Raycast(v3, Vector2.zero);
+
+					if (hit.collider != null)
+					{
+						Debug.Log($"{hit.transform.gameObject.name}");
+						UIManagerMainScene.instance.GainBuildingCreateControl(hit.transform.gameObject);
+					}
+			}
+		}
+#else
+    Debug.Log("Any other platform");
+		
+#endif
+
+		UpdateCoinText();
+	}
+
+	private void UpdateCoinText()
+	{
 		Scene scene = SceneManager.GetActiveScene();
 		if (scene.name.Equals("MainScene"))
 		{
@@ -62,6 +121,7 @@ public class GameManager : MonoBehaviour
 			text.text = "" + _coinCount;
 		}
 	}
+
 	public IEnumerator LoadSavedScene()
 	{
 		_scrollbar.GetComponent<Scrollbar>().size = 0;
@@ -93,4 +153,5 @@ public class GameManager : MonoBehaviour
 	{
 		_coinCount = coinCount;
 	}
+
 }

@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField]
 	private GameObject _scrollbar;
 	public GameObject _prefab;
-	private int coinScore = 0;
+	private int coinScore = 100;
 
 	[SerializeField]
 	private int _unitsOnScene = 0;
@@ -50,6 +50,8 @@ public class UIManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
+
+		_scoreText.text = "" + coinScore;
 		StartCoroutine(StartSpawnUnits());
 	}
 
