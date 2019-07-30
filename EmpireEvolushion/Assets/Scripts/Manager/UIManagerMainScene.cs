@@ -206,7 +206,7 @@ public class UIManagerMainScene :MonoBehaviour
 		_trophyButton.gameObject.SetActive(false);
 		_missionButton.gameObject.SetActive(false);
 		_buildMenuPanel.SetActive(false);
-		Debug.Break();
+		//Debug.Break();
 	}
 
 	public void EnablePanelsBeforeSceneLoad()
@@ -216,7 +216,7 @@ public class UIManagerMainScene :MonoBehaviour
 		_trophyButton.gameObject.SetActive(true);
 		_missionButton.gameObject.SetActive(true);
 		_buildMenuPanel.SetActive(false);
-		Debug.Break();
+		//Debug.Break();
 	}
 
 	public void LoadMainMap()

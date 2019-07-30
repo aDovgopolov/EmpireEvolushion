@@ -101,6 +101,7 @@ public class GameManager :MonoBehaviour
 
 					if (hit.collider != null)
 					{
+						CheckHitObject(hit);
 						Debug.Log($"{hit.transform.gameObject.name}");
 						UIManagerMainScene.instance.GainBuildingCreateControl(hit.transform.gameObject);
 					}
