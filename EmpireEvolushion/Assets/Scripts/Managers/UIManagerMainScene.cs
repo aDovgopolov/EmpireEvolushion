@@ -4,8 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UIManagerMainScene :MonoBehaviour
+public class UIManagerMainScene : MonoBehaviour
 {
+	#region Fields
+	[HideInInspector]
+	public static UIManagerMainScene instance = null;
+
 	[SerializeField]
 	private Button _trophyButton; 
 	[SerializeField]
@@ -26,42 +30,28 @@ public class UIManagerMainScene :MonoBehaviour
 	private Button _btn1Meel;
 	[SerializeField]
 	private Image _image;
+	[SerializeField]
+	private GameObject _scrollbar;
+
 	public Sprite imageBtn1Sprite1;
 	public Sprite millImage;
 	public Sprite imageBtn1Sprite2;
-	private bool _isSelectedBuilding = false;
+
+	private Canvas canvas;
 	private GameObject _selectedBuilding;
-
-	//private int coinScore;
-
-	[SerializeField]
-	private GameObject _scrollbar;
 	public GameObject _prefab;
 
-	[HideInInspector]
-	public static UIManagerMainScene instance = null;
+	private bool _isSelectedBuilding = false;
+	public bool IsSelectedBuilding
+	{
+		get => _isSelectedBuilding;
+		//set => _isSelectedBuilding = value;
+	}
 
-	Canvas canvas;
-
-	public int millPrice = 100;
 	private bool _coroutineStarted = false;
 
+	public int millPrice = 100;
 
-
-	public int CountUnitsOnScene
-	{
-		get
-		{
-			return _unitsOnScene;
-		}
-		set
-		{
-			if (value >= 0)
-			{
-				_unitsOnScene = value;
-			}
-		}
-	}
 	[SerializeField]
 	private int _unitsOnScene = 0;
 	[SerializeField]
@@ -69,7 +59,7 @@ public class UIManagerMainScene :MonoBehaviour
 	[SerializeField]
 	private int _cooldownTime = 5;
 
-
+	#endregion
 
 	void Awake()
 	{
@@ -83,29 +73,10 @@ public class UIManagerMainScene :MonoBehaviour
 
 	void Start()
 	{
-		//coinScore = GameManager.instance.MyCoinCount;
 		GameObject obj = GameObject.Find("Canvas");
 		canvas = obj.GetComponent<Canvas>();
 	}
 
-	void Update()
-	{
-		Scene scene = SceneManager.GetActiveScene();
-		if (scene.name.Equals("MainScene"))
-		{
-			Debug.Log(scene.name);
-			//_mapButton.gameObject.SetActive(false);
-			//_trophyButton.gameObject.SetActive(true);
-			//_missionButton.gameObject.SetActive(true);
-		}
-
-		//if (scene.name.Equals("Main") && !_coroutineStarted)
-		//{
-		//	_coroutineStarted = true;
-		//	StartCoroutine(StartSpawnUnits());
-		//}
-
-	}
 
 	public void OpenMissionMenu()
 	{
@@ -130,11 +101,11 @@ public class UIManagerMainScene :MonoBehaviour
 	public void OpenSettingsMenu()
 	{
 		Debug.Log("OpenSettingsMenu()");
+		//Empty logic yet
 	}
 
 	public void UpdateMeelImage()
 	{
-		//Debug.Log("UpdateMeelImage()");
 		if (!_isSelectedBuilding)
 		{
 			_image.GetComponent<Image>().sprite = imageBtn1Sprite2;
@@ -144,18 +115,21 @@ public class UIManagerMainScene :MonoBehaviour
 		{
 			//Debug.Log("NOT ENOUGH COINS");
 			NotEnoughMoneyMessage();
+			GameManager.instance.BuildSelected = false;
 		}
 		else
 		{
-			// build meel
-			//Debug.Log("build meel");
+			GameManager.instance.BuildSelected = false;
 			GameManager.instance.MyCoinCount = -millPrice;
 			_selectedBuilding.GetComponent<SpriteRenderer>().sprite = millImage;
-			_selectedBuilding.GetComponent<Building>().SetIsSomethingBuilt();
+
+			/*что лучше ниже? */
+			//_selectedBuilding.GetComponent<Building>().SetIsSomethingBuilt();
+			_selectedBuilding.GetComponent<Building>()._IsSomethingBuiltProp = true;
+
 			_isSelectedBuilding = false;
 			_image.GetComponent<Image>().sprite = imageBtn1Sprite1;
 
-			//hit.collider.gameObject.GetComponent<Building>()._IsSomethingBuiltProp = true;
 			_buildMenuPanel.SetActive(false);
 		}
 	}
@@ -178,23 +152,21 @@ public class UIManagerMainScene :MonoBehaviour
 	public void GainBuildingCreateControl(GameObject hit)
 	{
 		_selectedBuilding = hit;
+		//_isSelectedBuilding = true;
 		_buildMenuPanel.SetActive(true);
 		_buildMenuPanel.transform.position = WorldToUISpace(canvas, hit.transform.localPosition);
 	}
 
 	public Vector3 WorldToUISpace(Canvas parentCanvas, Vector3 worldPos)
 	{
-		//Convert the world for screen point so that it can be used with ScreenPointToLocalPointInRectangle function
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
 		Vector2 movePos;
 
-		//Convert the screenpoint to ui rectangle local point
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(parentCanvas.transform as RectTransform, screenPos, parentCanvas.worldCamera, out movePos);
-		//Convert the local point to world point
 		/*
 		 * Костыль movePos.y + 20
 		 */
-		return parentCanvas.transform.TransformPoint(new Vector3(movePos.x, movePos.y + 20));
+		return parentCanvas.transform.TransformPoint(new Vector3(movePos.x, movePos.y + 35));
 	}
 
 
@@ -226,41 +198,4 @@ public class UIManagerMainScene :MonoBehaviour
 		EnablePanelsBeforeSceneLoad();
 	}
 
-
-
-	public IEnumerator StartSpawnUnits()
-	{
-		_scrollbar.GetComponent<Scrollbar>().size = 0;
-
-		int i = 0;
-		while (true)
-		{
-			_scrollbar.GetComponent<Scrollbar>().size += 1 / 180f;
-
-			i++;
-
-			if (i == _cooldownTime)
-			{
-				i = 0;
-				if (_unitsOnScene < _maxUnitsOnScene)
-				{
-					Instantiate(_prefab, new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2f, -3.5f), 0), Quaternion.identity);
-					_unitsOnScene++;
-				}
-
-				_scrollbar.GetComponent<Scrollbar>().size = 0;
-			}
-
-			yield return new WaitForSeconds(0.1f);
-		}
-	}
-
-
-
-	//public void UpdateScoreCoinText(int score)
-	//{
-	//	coinScore += score;
-	//	//_scoreText.text = "" + coinScore;
-	//	GameManager.instance.SetCoinCount(coinScore);
-	//}
 }

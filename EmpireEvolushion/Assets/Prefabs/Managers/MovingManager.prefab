@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &805790463100231378
+--- !u!1 &7908171950182311842
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8084354037542662513}
-  - component: {fileID: 7536934920117689263}
+  - component: {fileID: 7908171950182311844}
+  - component: {fileID: 7908171950182311843}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: MovingManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8084354037542662513
+--- !u!4 &7908171950182311844
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805790463100231378}
+  m_GameObject: {fileID: 7908171950182311842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 384.2085, y: 61.548492, z: 0}
+  m_LocalPosition: {x: -4.1190295, y: 2.115564, z: -2.4566453}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7536934920117689263
+--- !u!114 &7908171950182311843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805790463100231378}
+  m_GameObject: {fileID: 7908171950182311842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0382ab897c20814d8a95148d1f1f6b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f37df41e73f321489a44b5467485204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scrollbar: {fileID: 5663798007624095506, guid: 4b92ce65ca494dc47b7f4b7cf9b1d5e4,
-    type: 3}
-  _prefab: {fileID: 7116209731338192826, guid: 7e4eee4e446c5a044a0f41c298e2d677, type: 3}
-  _unitsOnScene: 0
-  _maxUnitsOnScene: 5
-  _cooldownTime: 5
+  _fireRate: 0.5

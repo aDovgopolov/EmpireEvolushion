@@ -2,30 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
+public class UnitSpawnManager : MonoBehaviour
 {
+	#region Fields
 	[HideInInspector]
-	public static UIManager instance = null;
-
-	[SerializeField]
-	private GameObject _scrollbar;
-	public GameObject _prefab;
-	private int coinScore = GameManager.instance.MyCoinCount;
+	public static UnitSpawnManager instance = null;
 	[SerializeField]
 	private int _unitsOnScene = 0;
 	[SerializeField]
 	private int _maxUnitsOnScene = 5;
 	[SerializeField]
 	private int _cooldownTime = 5;
-
 	public int CountUnitsOnScene
 	{
-		get
-		{
-			return _unitsOnScene;
-		}
+		get => _unitsOnScene;
 		set
 		{
 			if (value >= 0)
@@ -35,25 +26,30 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	void Awake()
+	[SerializeField]
+	private GameObject _scrollbar;
+	public GameObject _prefab;
+
+	#endregion
+
+	private void Awake()
 	{
 		if (instance == null)
 			instance = this;
 		else if (instance != this)
 			Destroy(gameObject);
+
+		DontDestroyOnLoad(gameObject);
 	}
 
 	void Start()
     {
-		//_scoreText.text = "" + coinScore;
-		StartCoroutine(StartSpawnUnits());
-	}
+		_scrollbar = GameObject.Find("Canvas2").transform.GetChild(0).gameObject;
 
-	public void UpdateScoreCoinText(int score)
-	{
-		coinScore += score;
-		//_scoreText.text = "" + coinScore;
-		GameManager.instance.SetCoinCount(coinScore);
+		if(_scrollbar == null)
+			Debug.LogError($"_scrollbar has not been init");
+
+		StartCoroutine(StartSpawnUnits());
 	}
 
 	public IEnumerator StartSpawnUnits()
@@ -61,6 +57,7 @@ public class UIManager : MonoBehaviour
 		_scrollbar.GetComponent<Scrollbar>().size = 0;
 
 		int i = 0;
+
 		while (true)
 		{
 			_scrollbar.GetComponent<Scrollbar>().size += 1 / 180f;

@@ -16,29 +16,19 @@ public class Building :MonoBehaviour
 			_IsSomethingBuilt = value;
 		}
 	}
-	 // Start is called before the first frame update
+
 	void Start()
 	{
 		if (m_MyEvent == null)
 			m_MyEvent = new UnityEvent();
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-		//if (Input.anyKeyDown && m_MyEvent != null)
-		//{
-		//	m_MyEvent.Invoke();
-		//}
-	}
-
-
 	public void SetIsSomethingBuilt()
 	{
 		_IsSomethingBuilt = true;
 	}
 
-	public void YAYA()
+	public void EnterBuildingScene()
 	{
 		m_MyEvent.Invoke();
 	}
@@ -48,10 +38,9 @@ public class Building :MonoBehaviour
 		if(_IsSomethingBuilt)
 		{
 			// Load scene depends on type of building
-			SceneManager.LoadScene("Main");
-
 			UIManagerMainScene.instance.DisablePanelsBeforeSceneLoad();
-			Debug.Log("Ping");
+			SceneManager.LoadScene("Main");
+			//Debug.Log("Ping");
 		}
 	}
 }

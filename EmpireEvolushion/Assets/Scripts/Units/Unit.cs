@@ -4,31 +4,35 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+	//Prop
+	#region
+
 	[SerializeField]
 	private int _coinCount;
-	private CointSpawner _myCoin;
+	public int MyCoinCount
+	{
+		get { return _coinCount; }
+		private set { }
+	}
+
 	[SerializeField]
 	private GameObject _coin;
 
-	public int MyCoinCount
-	{
-		get {
-			return _coinCount;
-		}
-		private set{}
-	}
 	[SerializeField]
-	private GameObject myObject;
-	public GameObject MyObject
+	private GameObject _nextSpawningObjct;
+	public GameObject NextUnitLevel
 	{
 		get
 		{
-			return myObject;
+			return _nextSpawningObjct;
 		}
 		private set
 		{
 		}
 	}
+
+	#endregion
+
 
 	void Start()
     {
@@ -53,7 +57,8 @@ public class Unit : MonoBehaviour
 	{
 		GameObject coin = Instantiate(_coin, transform.position + new Vector3(0, 0.85f, 0), Quaternion.identity);
 		Coin coin_value = coin.GetComponent<Coin>();
-		coin_value.coinCosts = _coinCount;
+		coin_value.CoinCost = _coinCount;
 		coin.transform.parent = transform;
 	}
+
 }

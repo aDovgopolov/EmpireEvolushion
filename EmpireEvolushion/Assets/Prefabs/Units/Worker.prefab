@@ -58,6 +58,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -121,5 +122,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _coinCount: 10
   _coin: {fileID: 341623476865130870, guid: 600016ba501501f42a97b4a077f76b7a, type: 3}
-  myObject: {fileID: 1548051593120663737, guid: 43c215ae3f07dfd43b5981e2d420fc71,
+  _nextSpawningObjct: {fileID: 1548051593120663737, guid: 43c215ae3f07dfd43b5981e2d420fc71,
     type: 3}
