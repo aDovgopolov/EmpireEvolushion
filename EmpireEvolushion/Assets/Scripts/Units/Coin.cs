@@ -4,29 +4,19 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-
 	#region
 	private float _speed = 0.5f;
-	//private UIManager UIManager;
 
 	private int coinCosts;
 	public int CoinCost
 	{
-		get
-		{
-			return coinCosts; 
-		}
-		set
-		{
-			coinCosts = value;
-		}
+		get => coinCosts;
+		set => coinCosts = value;
 	}
 	#endregion
 
 	void Start()
     {
-		//UIManager = GameObject.Find("Canvas2").GetComponent<UIManager>();
-		//UIManager.UpdateScoreCoinText(coinCosts);
 		GameManager.instance.SetCoinCount(coinCosts);
 		Destroy(this.gameObject, 1.5f);
     }

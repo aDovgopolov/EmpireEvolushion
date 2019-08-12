@@ -7,15 +7,8 @@ using UnityEngine.SceneManagement;
 public class Building :MonoBehaviour
 {
 	public UnityEvent m_MyEvent;
-	private bool _IsSomethingBuilt = false;
-	public bool _IsSomethingBuiltProp
-	{
-		get { return _IsSomethingBuilt; }
-		set
-		{
-			_IsSomethingBuilt = value;
-		}
-	}
+
+	public bool _IsSomethingBuiltProp { get; set; } = false;
 
 	void Start()
 	{
@@ -25,7 +18,7 @@ public class Building :MonoBehaviour
 
 	public void SetIsSomethingBuilt()
 	{
-		_IsSomethingBuilt = true;
+		_IsSomethingBuiltProp = true;
 	}
 
 	public void EnterBuildingScene()
@@ -35,12 +28,13 @@ public class Building :MonoBehaviour
 
 	public void Ping()
 	{
-		if(_IsSomethingBuilt)
+		if(_IsSomethingBuiltProp)
 		{
-			// Load scene depends on type of building
 			UIManagerMainScene.instance.DisablePanelsBeforeSceneLoad();
 			SceneManager.LoadScene("Main");
-			//Debug.Log("Ping");
+
+			if(UnitSpawnManager.instance != null)
+				UnitSpawnManager.instance.StartNeededCoroutine();
 		}
 	}
 }

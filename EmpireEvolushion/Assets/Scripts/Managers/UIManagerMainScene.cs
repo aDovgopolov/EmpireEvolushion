@@ -4,11 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UIManagerMainScene : MonoBehaviour
+public class UIManagerMainScene : MonoBehaviour, IObserver
 {
 	#region Fields
 	[HideInInspector]
 	public static UIManagerMainScene instance = null;
+
+	private Canvas canvas;
+
+	[SerializeField]
+	private GameObject _questPanel;
+	[SerializeField]
+	private GameObject _mainScreenPanel;
+	[SerializeField]
+	public GameObject _buildMenuPanel;
+	[SerializeField]
+	private GameObject _achivkaPanel;
 
 	[SerializeField]
 	private Button _trophyButton; 
@@ -17,19 +28,15 @@ public class UIManagerMainScene : MonoBehaviour
 	[SerializeField]
 	private Button _mapButton;
 	[SerializeField]
-	private GameObject _achivkaPanel;
+	private Button _btn1Meel;
+
 	[SerializeField]
 	private Text _notEnoughMoneyText;
-	[SerializeField]
-	private GameObject _questPanel;
-	[SerializeField]
-	private GameObject _mainScreenPanel;
-	[SerializeField]
-	public GameObject _buildMenuPanel;
-	[SerializeField]
-	private Button _btn1Meel;
+	private Text _CoinText;
+
 	[SerializeField]
 	private Image _image;
+
 	[SerializeField]
 	private GameObject _scrollbar;
 
@@ -37,9 +44,7 @@ public class UIManagerMainScene : MonoBehaviour
 	public Sprite millImage;
 	public Sprite imageBtn1Sprite2;
 
-	private Canvas canvas;
 	private GameObject _selectedBuilding;
-	public GameObject _prefab;
 
 	private bool _isSelectedBuilding = false;
 	public bool IsSelectedBuilding
@@ -47,20 +52,10 @@ public class UIManagerMainScene : MonoBehaviour
 		get => _isSelectedBuilding;
 		//set => _isSelectedBuilding = value;
 	}
-
-	private bool _coroutineStarted = false;
-
-	public int millPrice = 100;
-
-	[SerializeField]
-	private int _unitsOnScene = 0;
-	[SerializeField]
-	private int _maxUnitsOnScene = 5;
-	[SerializeField]
-	private int _cooldownTime = 5;
-
 	#endregion
 
+
+	#region Methods
 	void Awake()
 	{
 		if (instance == null)
@@ -69,18 +64,18 @@ public class UIManagerMainScene : MonoBehaviour
 			Destroy(gameObject);
 
 		DontDestroyOnLoad(gameObject);
+		_CoinText = GameObject.Find("coin_text").GetComponent<Text>();
 	}
 
 	void Start()
 	{
+		GameManager.instance.Attach(this);
 		GameObject obj = GameObject.Find("Canvas");
 		canvas = obj.GetComponent<Canvas>();
 	}
 
-
 	public void OpenMissionMenu()
 	{
-		Debug.Log("OpenMissionMenu()");
 		_mainScreenPanel.SetActive(false);
 		_questPanel.SetActive(true);
 	}
@@ -111,7 +106,7 @@ public class UIManagerMainScene : MonoBehaviour
 			_image.GetComponent<Image>().sprite = imageBtn1Sprite2;
 			_isSelectedBuilding = true;
 		}
-		else if (GameManager.instance.MyCoinCount < millPrice)
+		else if (GameManager.instance.MyCoinCount < BuildingManager.instance.millPrice)
 		{
 			//Debug.Log("NOT ENOUGH COINS");
 			NotEnoughMoneyMessage();
@@ -120,7 +115,7 @@ public class UIManagerMainScene : MonoBehaviour
 		else
 		{
 			GameManager.instance.BuildSelected = false;
-			GameManager.instance.MyCoinCount = -millPrice;
+			GameManager.instance.SetCoinCount(-BuildingManager.instance.millPrice);
 			_selectedBuilding.GetComponent<SpriteRenderer>().sprite = millImage;
 
 			/*что лучше ниже? */
@@ -154,22 +149,24 @@ public class UIManagerMainScene : MonoBehaviour
 		_selectedBuilding = hit;
 		//_isSelectedBuilding = true;
 		_buildMenuPanel.SetActive(true);
+		Debug.Log($"canvas = { canvas} / hit = {hit} / hit.transform.localPosition = {hit.transform.localPosition} / _buildMenuPanel = {_buildMenuPanel}");
 		_buildMenuPanel.transform.position = WorldToUISpace(canvas, hit.transform.localPosition);
+		Debug.Log("GainBuildingCreateControl");
 	}
 
 	public Vector3 WorldToUISpace(Canvas parentCanvas, Vector3 worldPos)
 	{
+		Debug.Log(Camera.main);
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
 		Vector2 movePos;
 
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(parentCanvas.transform as RectTransform, screenPos, parentCanvas.worldCamera, out movePos);
 		/*
-		 * Костыль movePos.y + 20
+		 * Костыль movePos.y + 35
 		 */
+		Debug.Log("WorldToUISpace(Canvas parentCanvas, Vector3 worldPos)");
 		return parentCanvas.transform.TransformPoint(new Vector3(movePos.x, movePos.y + 35));
 	}
-
-
 
 	public void DisablePanelsBeforeSceneLoad()
 	{
@@ -193,9 +190,22 @@ public class UIManagerMainScene : MonoBehaviour
 
 	public void LoadMainMap()
 	{
-		Debug.Log("LoadMainMap()");
+		UnitSpawnManager.instance.StopNeededCoroutine();
 		SceneManager.LoadScene("MainScene");
 		EnablePanelsBeforeSceneLoad();
 	}
 
+	#endregion
+
+
+	#region Observer 
+
+	public void UpdateUICoin(int subject)
+	{
+		_CoinText.text = "" + subject;
+
+		//Debug.Log("ConcreteObserverA: Reacted to the event." + subject);
+		//if ((subject as Subject).State < 3)
+	}
+	#endregion
 }

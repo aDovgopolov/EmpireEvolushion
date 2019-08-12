@@ -44,21 +44,20 @@ public class UnitSpawnManager : MonoBehaviour
 
 	void Start()
     {
-		_scrollbar = GameObject.Find("Canvas2").transform.GetChild(0).gameObject;
-
-		if(_scrollbar == null)
-			Debug.LogError($"_scrollbar has not been init");
-
+		AttachScrollBar();
 		StartCoroutine(StartSpawnUnits());
 	}
 
-	public IEnumerator StartSpawnUnits()
+	private bool IsLooping = true;
+
+	private IEnumerator StartSpawnUnits()
 	{
+
 		_scrollbar.GetComponent<Scrollbar>().size = 0;
 
 		int i = 0;
 
-		while (true)
+		while (IsLooping)
 		{
 			_scrollbar.GetComponent<Scrollbar>().size += 1 / 180f;
 
@@ -78,5 +77,29 @@ public class UnitSpawnManager : MonoBehaviour
 
 			yield return new WaitForSeconds(0.1f);
 		}
+	}
+
+	private void AttachScrollBar()
+	{
+		Debug.Log(GameObject.Find("Canvas2"));
+		_scrollbar = GameObject.Find("Canvas2").transform.GetChild(0).gameObject;
+
+		if (_scrollbar == null)
+			Debug.LogError($"_scrollbar has not been init");
+	}
+
+	public void StartNeededCoroutine()
+	{
+		Debug.Log("StartNeededCoroutine()");
+		AttachScrollBar();
+		IsLooping = true;
+		StartCoroutine(StartSpawnUnits());
+	}
+
+	public void StopNeededCoroutine()
+	{
+		Debug.Log("StopNeededCoroutine()");
+		IsLooping = false;
+		StopCoroutine(StartSpawnUnits());
 	}
 }

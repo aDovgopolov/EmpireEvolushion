@@ -42,7 +42,7 @@ public class MovingScript :MonoBehaviour
 
 #elif UNITY_ANDROID
 		
-		Debug.Log("#elif UNITY_ANDROID");
+		//Debug.Log("#elif UNITY_ANDROID");
     if (Input.GetMouseButton(0) || Input.touchCount > 0)
 		{
 			Touch touch = Input.GetTouch(0);
@@ -82,6 +82,9 @@ public class MovingScript :MonoBehaviour
 
 	private void Clicker(RaycastHit2D hit)
 	{
+		if(hit.transform == null)
+			return;
+
 		if (Time.time > _canFire)
 		{
 			_canFire = Time.time + _fireRate;
