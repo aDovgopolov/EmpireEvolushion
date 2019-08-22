@@ -21,6 +21,7 @@ public class MovingScript :MonoBehaviour
 
 	void Update()
 	{
+		return;
 #if UNITY_EDITOR
 		//Debug.Log("#if UNITY_EDITOR");
 		if (Input.GetMouseButton(0) || Input.touchCount > 0)

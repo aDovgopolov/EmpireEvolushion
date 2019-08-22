@@ -17,6 +17,7 @@ public class Coin : MonoBehaviour
 
 	void Start()
     {
+	    // когда появляеться монетка она увеличивает общую сумму 
 		GameManager.instance.SetCoinCount(coinCosts);
 		Destroy(this.gameObject, 1.5f);
     }

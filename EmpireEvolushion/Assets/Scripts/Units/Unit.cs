@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, TouchTargetedDelegate
 {
-	//Prop
 	#region
 
 	[SerializeField]
@@ -37,6 +36,8 @@ public class Unit : MonoBehaviour
 	void Start()
     {
 		StartCoroutine(SpawnCoin());
+		GameObject go = GameObject.Find("SharedTouchDispatcher");
+		go.GetComponent<TouchDispatcher>().addTargetedDelegate(this, 1, false);
 	}
 
 	IEnumerator SpawnCoin()
@@ -61,4 +62,27 @@ public class Unit : MonoBehaviour
 		coin.transform.parent = transform;
 	}
 
+	public bool TouchBegan(Vector2 position, int fingerId)
+	{
+		Debug.Log($"TouchBegan {position}");
+		return true;
+	}
+
+	public void TouchMoved(Vector2 position, int fingerId)
+	{
+		Vector3 vector3 = new Vector3(position.x, position.y, 0); 
+		Vector3 vec = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 10f));
+		transform.position = vec;
+		Debug.Log($"TouchMoved {position} + {vec}");
+	}
+
+	public void TouchEnded(Vector2 position, int fingerId)
+	{
+		Debug.Log($"TouchEnded {position}");
+	}
+
+	public void TouchCanceled(Vector2 position, int fingerId)
+	{
+		Debug.Log($"TouchCanceled {position}");
+	}
 }
